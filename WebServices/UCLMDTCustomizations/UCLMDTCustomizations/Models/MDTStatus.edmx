@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="ModelsStoreContainer">
+    <EntitySet Name="Logs" EntityType="Models.Store.Logs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Status" EntityType="Models.Store.Status" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Variables" EntityType="Models.Store.Variables" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="StatusLog" Association="Models.Store.StatusLog">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Log" EntitySet="Logs" />
+    </AssociationSet>
+    <AssociationSet Name="StatusVariable" Association="Models.Store.StatusVariable">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Variable" EntitySet="Variables" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Logs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="File" Type="varbinary(max)" Nullable="false" />
+    <Property Name="StatusId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Engineer" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Property" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="MachineId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ComputerName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Severity" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="StepName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="DartIP" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="DartPort" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="DartTicket" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="CurrentStep" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="TotalSteps" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="SmsUniqueID" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="MessageID" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="VmHost" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="VmName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Custodian" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Room" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Location" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="StartTime" Type="datetime" Nullable="true" />
+    <Property Name="Timestamp" Type="datetime" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Variables">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StatusId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Property" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <Association Name="StatusLog">
+    <End Role="Status" Type="Models.Store.Status" Multiplicity="1" />
+    <End Role="Log" Type="Models.Store.Logs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Log">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="StatusVariable">
+    <End Role="Status" Type="Models.Store.Status" Multiplicity="1" />
+    <End Role="Variable" Type="Models.Store.Variables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Variable">
+        <PropertyRef Name="StatusId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="InventoryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Logs" EntityType="Models.Log" />
+          <EntitySet Name="Status" EntityType="Models.Status" />
+          <AssociationSet Name="StatusLog" Association="Models.StatusLog">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <EntitySet Name="Variables" EntityType="Models.Variable" />
+          <AssociationSet Name="StatusVariable" Association="Models.StatusVariable">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Variable" EntitySet="Variables" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="File" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Status" Relationship="Models.StatusLog" FromRole="Log" ToRole="Status" />
+          <Property Type="Guid" Name="StatusId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Engineer" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Property" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="MachineId" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ComputerName" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Severity" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="StepName" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DartIP" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DartPort" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DartTicket" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CurrentStep" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="TotalSteps" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Logs" Relationship="Models.StatusLog" FromRole="Status" ToRole="Log" />
+          <Property Type="String" Name="SmsUniqueID" />
+          <Property Type="String" Name="MessageID" />
+          <Property Type="String" Name="VmHost" />
+          <Property Type="String" Name="VmName" />
+          <Property Type="String" Name="Custodian" />
+          <Property Type="String" Name="Room" />
+          <Property Type="String" Name="Location" />
+          <Property Type="DateTime" Name="StartTime" />
+          <Property Type="DateTime" Name="Timestamp" />
+          <NavigationProperty Name="Variables" Relationship="Models.StatusVariable" FromRole="Status" ToRole="Variable" />
+        </EntityType>
+        <Association Name="StatusLog">
+          <End Type="Models.Status" Role="Status" Multiplicity="1" />
+          <End Type="Models.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Variable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Status" Relationship="Models.StatusVariable" FromRole="Variable" ToRole="Status" />
+          <Property Type="Guid" Name="StatusId" Nullable="false" />
+          <Property Type="String" Name="Property" Nullable="false" />
+          <Property Type="String" Name="Value" />
+        </EntityType>
+        <Association Name="StatusVariable">
+          <End Type="Models.Status" Role="Status" Multiplicity="1" />
+          <End Type="Models.Variable" Role="Variable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Variable">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="InventoryEntities">
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Log)">
+        <MappingFragment StoreEntitySet="Logs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="File" ColumnName="File" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Status">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Status)">
+        <MappingFragment StoreEntitySet="Status">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Engineer" ColumnName="Engineer" />
+          <ScalarProperty Name="Property" ColumnName="Property" />
+          <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+          <ScalarProperty Name="ComputerName" ColumnName="ComputerName" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+          <ScalarProperty Name="StepName" ColumnName="StepName" />
+          <ScalarProperty Name="DartIP" ColumnName="DartIP" />
+          <ScalarProperty Name="DartPort" ColumnName="DartPort" />
+          <ScalarProperty Name="DartTicket" ColumnName="DartTicket" />
+          <ScalarProperty Name="CurrentStep" ColumnName="CurrentStep" />
+          <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="SmsUniqueID" ColumnName="SmsUniqueID" />
+          <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+          <ScalarProperty Name="VmHost" ColumnName="VmHost" />
+          <ScalarProperty Name="VmName" ColumnName="VmName" />
+          <ScalarProperty Name="Custodian" ColumnName="Custodian" />
+          <ScalarProperty Name="Room" ColumnName="Room" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Variables">
+      <EntityTypeMapping TypeName="IsTypeOf(Models.Variable)">
+        <MappingFragment StoreEntitySet="Variables">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="Property" ColumnName="Property" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model1">
+        <EntityTypeShape EntityType="Models.Log" Width="1.5" PointX="4.125" PointY="0.5" Height="1.787985026041667" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.Status" Width="1.5" PointX="1.375" PointY="0.75" Height="5.4417122395833326" IsExpanded="true" />
+        <AssociationConnector Association="Models.StatusLog">
+          <ConnectorPoint PointX="2.875" PointY="1.5189925130208335" />
+          <ConnectorPoint PointX="4.125" PointY="1.5189925130208335" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="Models.Variable" Width="1.5" PointX="6.375" PointY="1" Height="1.9802864583333339" />
+        <AssociationConnector Association="Models.StatusVariable">
+          <ConnectorPoint PointX="2.875" PointY="2.6653857421875005" />
+          <ConnectorPoint PointX="6.375" PointY="2.6653857421875005" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

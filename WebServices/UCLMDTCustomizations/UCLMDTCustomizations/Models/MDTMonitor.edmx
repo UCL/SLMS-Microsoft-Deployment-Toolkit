@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MDT_MonitorModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="MDT_MonitorModelStoreContainer">
+    <EntitySet Name="ComputerIdentities" EntityType="MDT_MonitorModel.Store.ComputerIdentities" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Computers" EntityType="MDT_MonitorModel.Store.Computers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="NextIDs" EntityType="MDT_MonitorModel.Store.NextIDs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Logs" EntityType="MDT_MonitorModel.Store.Logs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Properties" EntityType="MDT_MonitorModel.Store.Properties" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ComputerHasIdentities" Association="MDT_MonitorModel.Store.ComputerHasIdentities">
+      <End Role="Computers" EntitySet="Computers" />
+      <End Role="ComputerIdentity" EntitySet="ComputerIdentities" />
+    </AssociationSet>
+    <AssociationSet Name="ComputerLog" Association="MDT_MonitorModel.Store.ComputerLog">
+      <End Role="Computer" EntitySet="Computers" />
+      <End Role="Log" EntitySet="Logs" />
+    </AssociationSet>
+    <AssociationSet Name="ComputerProperty" Association="MDT_MonitorModel.Store.ComputerProperty">
+      <End Role="Computer" EntitySet="Computers" />
+      <End Role="Property" EntitySet="Properties" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ComputerIdentities">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Identifier" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Identifier" Type="nvarchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Computers">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Name" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="PercentComplete" Type="smallint" Nullable="true" />
+    <Property Name="Settings" Type="nvarchar" Nullable="true" MaxLength="4000" />
+    <Property Name="Warnings" Type="int" Nullable="true" />
+    <Property Name="Errors" Type="int" Nullable="true" />
+    <Property Name="DeploymentStatus" Type="int" Nullable="true" />
+    <Property Name="StartTime" Type="datetime" Nullable="true" />
+    <Property Name="EndTime" Type="datetime" Nullable="true" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UniqueID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CurrentStep" Type="int" Nullable="true" />
+    <Property Name="TotalSteps" Type="int" Nullable="true" />
+    <Property Name="StepName" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="LastTime" Type="datetime" Nullable="true" />
+    <Property Name="DartIP" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="DartPort" Type="nvarchar" Nullable="true" MaxLength="8" />
+    <Property Name="DartTicket" Type="nvarchar" Nullable="true" MaxLength="16" />
+    <Property Name="VMHost" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="VMName" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="TestColumn" Type="nvarchar" Nullable="true" MaxLength="100" />
+    <Property Name="Severity" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="MessageID" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Custodian" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Room" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Location" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ComputerName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="UUID" Type="uniqueidentifier" Nullable="true" />
+    <Property Name="MacAddresses" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Operator" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="NextIDs">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="NextValue" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Logs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="File" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ComputerID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Properties">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyKey" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ComputerID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ComputerHasIdentities">
+    <End Role="Computers" Type="MDT_MonitorModel.Store.Computers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ComputerIdentity" Type="MDT_MonitorModel.Store.ComputerIdentities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Computers">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ComputerIdentity">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ComputerLog">
+    <End Role="Computer" Type="MDT_MonitorModel.Store.Computers" Multiplicity="1" />
+    <End Role="Log" Type="MDT_MonitorModel.Store.Logs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Computer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Log">
+        <PropertyRef Name="ComputerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ComputerProperty">
+    <End Role="Computer" Type="MDT_MonitorModel.Store.Computers" Multiplicity="1" />
+    <End Role="Property" Type="MDT_MonitorModel.Store.Properties" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Computer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Property">
+        <PropertyRef Name="ComputerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MDT_MonitorModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ComputerIdentities" EntityType="MDT_MonitorModel.ComputerIdentity" />
+          <EntitySet Name="Computers" EntityType="MDT_MonitorModel.Computer" />
+          <EntitySet Name="NextIDs" EntityType="MDT_MonitorModel.NextID" />
+          <AssociationSet Name="ComputerHasIdentities" Association="MDT_MonitorModel.ComputerHasIdentities">
+            <End Role="Computers" EntitySet="Computers" />
+            <End Role="ComputerIdentity" EntitySet="ComputerIdentities" />
+          </AssociationSet>
+          <EntitySet Name="Logs" EntityType="MDT_MonitorModel.Log" />
+          <AssociationSet Name="ComputerLog" Association="MDT_MonitorModel.ComputerLog">
+            <End Role="Computer" EntitySet="Computers" />
+            <End Role="Log" EntitySet="Logs" />
+          </AssociationSet>
+          <EntitySet Name="Properties" EntityType="MDT_MonitorModel.Property" />
+          <AssociationSet Name="ComputerProperty" Association="MDT_MonitorModel.ComputerProperty">
+            <End Role="Computer" EntitySet="Computers" />
+            <End Role="Property" EntitySet="Properties" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="ComputerIdentity">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Identifier" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Identifier" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Computer" Relationship="MDT_MonitorModel.ComputerHasIdentities" FromRole="ComputerIdentity" ToRole="Computers" />
+        </EntityType>
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="PercentComplete" Type="Int16" />
+          <Property Name="Settings" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="Warnings" Type="Int32" />
+          <Property Name="Errors" Type="Int32" />
+          <Property Name="DeploymentStatus" Type="Int32" />
+          <Property Name="StartTime" Type="DateTime" />
+          <Property Name="EndTime" Type="DateTime" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UniqueID" Type="Guid" Nullable="false" />
+          <Property Name="CurrentStep" Type="Int32" />
+          <Property Name="TotalSteps" Type="Int32" />
+          <Property Name="StepName" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="LastTime" Type="DateTime" />
+          <Property Name="DartIP" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="DartPort" Type="String" MaxLength="8" Unicode="true" FixedLength="false" />
+          <Property Name="DartTicket" Type="String" MaxLength="16" Unicode="true" FixedLength="false" />
+          <Property Name="VMHost" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="VMName" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="TestColumn" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="ComputerIdentities" Relationship="MDT_MonitorModel.ComputerHasIdentities" FromRole="Computers" ToRole="ComputerIdentity" />
+          <NavigationProperty Name="Logs" Relationship="MDT_MonitorModel.ComputerLog" FromRole="Computer" ToRole="Log" />
+          <NavigationProperty Name="Properties" Relationship="MDT_MonitorModel.ComputerProperty" FromRole="Computer" ToRole="Property" />
+          <Property Type="String" Name="Severity" />
+          <Property Type="String" Name="Message" />
+          <Property Type="String" Name="MessageID" />
+          <Property Type="String" Name="Custodian" />
+          <Property Type="String" Name="Room" />
+          <Property Type="String" Name="Location" />
+          <Property Type="String" Name="ComputerName" />
+          <Property Type="Guid" Name="UUID" />
+          <Property Type="String" Name="MacAddresses" />
+          <Property Type="String" Name="Operator" />
+        </EntityType>
+        <EntityType Name="NextID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NextValue" Type="Int32" />
+        </EntityType>
+        <Association Name="ComputerHasIdentities">
+          <End Role="Computers" Type="MDT_MonitorModel.Computer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ComputerIdentity" Type="MDT_MonitorModel.ComputerIdentity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ComputerIdentity">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="File" Nullable="false" />
+          <Property Type="String" Name="FileName" Nullable="false" />
+          <NavigationProperty Name="Computer" Relationship="MDT_MonitorModel.ComputerLog" FromRole="Log" ToRole="Computer" />
+          <Property Type="Int32" Name="ComputerID" Nullable="false" />
+        </EntityType>
+        <Association Name="ComputerLog">
+          <End Type="MDT_MonitorModel.Computer" Role="Computer" Multiplicity="1" />
+          <End Type="MDT_MonitorModel.Log" Role="Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Log">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="PropertyKey" />
+          <Property Type="String" Name="PropertyValue" />
+          <NavigationProperty Name="Computer" Relationship="MDT_MonitorModel.ComputerProperty" FromRole="Property" ToRole="Computer" />
+          <Property Type="Int32" Name="ComputerID" Nullable="false" />
+        </EntityType>
+        <Association Name="ComputerProperty">
+          <End Type="MDT_MonitorModel.Computer" Role="Computer" Multiplicity="1" />
+          <End Type="MDT_MonitorModel.Property" Role="Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Property">
+              <PropertyRef Name="ComputerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MDT_MonitorModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="ComputerIdentities">
+      <EntityTypeMapping TypeName="IsTypeOf(MDT_MonitorModel.ComputerIdentity)">
+        <MappingFragment StoreEntitySet="ComputerIdentities">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Identifier" ColumnName="Identifier" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Computers">
+      <EntityTypeMapping TypeName="IsTypeOf(MDT_MonitorModel.Computer)">
+        <MappingFragment StoreEntitySet="Computers">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PercentComplete" ColumnName="PercentComplete" />
+          <ScalarProperty Name="Settings" ColumnName="Settings" />
+          <ScalarProperty Name="Warnings" ColumnName="Warnings" />
+          <ScalarProperty Name="Errors" ColumnName="Errors" />
+          <ScalarProperty Name="DeploymentStatus" ColumnName="DeploymentStatus" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+          <ScalarProperty Name="CurrentStep" ColumnName="CurrentStep" />
+          <ScalarProperty Name="TotalSteps" ColumnName="TotalSteps" />
+          <ScalarProperty Name="StepName" ColumnName="StepName" />
+          <ScalarProperty Name="LastTime" ColumnName="LastTime" />
+          <ScalarProperty Name="DartIP" ColumnName="DartIP" />
+          <ScalarProperty Name="DartPort" ColumnName="DartPort" />
+          <ScalarProperty Name="DartTicket" ColumnName="DartTicket" />
+          <ScalarProperty Name="VMHost" ColumnName="VMHost" />
+          <ScalarProperty Name="VMName" ColumnName="VMName" />
+          <ScalarProperty Name="TestColumn" ColumnName="TestColumn" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+          <ScalarProperty Name="Custodian" ColumnName="Custodian" />
+          <ScalarProperty Name="Room" ColumnName="Room" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="ComputerName" ColumnName="ComputerName" />
+          <ScalarProperty Name="UUID" ColumnName="UUID" />
+          <ScalarProperty Name="MacAddresses" ColumnName="MacAddresses" />
+          <ScalarProperty Name="Operator" ColumnName="Operator" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NextIDs">
+      <EntityTypeMapping TypeName="IsTypeOf(MDT_MonitorModel.NextID)">
+        <MappingFragment StoreEntitySet="NextIDs">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="NextValue" ColumnName="NextValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="IsTypeOf(MDT_MonitorModel.Log)">
+        <MappingFragment StoreEntitySet="Logs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="File" ColumnName="File" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Properties">
+      <EntityTypeMapping TypeName="IsTypeOf(MDT_MonitorModel.Property)">
+        <MappingFragment StoreEntitySet="Properties">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PropertyKey" ColumnName="PropertyKey" />
+          <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
+          <ScalarProperty Name="ComputerID" ColumnName="ComputerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MDTMonitor" ZoomLevel="92">
+        <EntityTypeShape EntityType="MDT_MonitorModel.ComputerIdentity" Width="1.5" PointX="3.5" PointY="3.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="MDT_MonitorModel.Computer" Width="1.5" PointX="0.75" PointY="0.75" Height="7.3647265625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MDT_MonitorModel.NextID" Width="1.5" PointX="8.625" PointY="1" Height="1.4033821614583326" IsExpanded="true" />
+        <AssociationConnector Association="MDT_MonitorModel.ComputerHasIdentities" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.297841796875" />
+          <ConnectorPoint PointX="3.5" PointY="4.297841796875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MDT_MonitorModel.Log" Width="1.5" PointX="3.5" PointY="1" Height="1.59568359375" />
+        <AssociationConnector Association="MDT_MonitorModel.ComputerLog">
+          <ConnectorPoint PointX="2.25" PointY="1.9901432291666668" />
+          <ConnectorPoint PointX="3.5" PointY="1.9901432291666668" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="MDT_MonitorModel.Property" Width="1.5" PointX="5.75" PointY="1.625" Height="1.59568359375" />
+        <AssociationConnector Association="MDT_MonitorModel.ComputerProperty">
+          <ConnectorPoint PointX="2.25" PointY="3.2401432291666667" />
+          <ConnectorPoint PointX="5.75" PointY="3.2401432291666667" />
+        </AssociationConnector>
+        </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
